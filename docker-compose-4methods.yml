@@ -1,0 +1,639 @@
+services:
+  # ============================================
+  # Method 1: MOON (172.18.1.x)
+  # ============================================
+  moon_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_moon_server
+    hostname: fl_moon_server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.1.10
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  moon_client0:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_moon_client0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.1.11
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - moon_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  moon_client1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_moon_client1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.1.12
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - moon_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  moon_client2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_moon_client2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.1.13
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - moon_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  moon_client3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_moon_client3
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.1.14
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - moon_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  moon_client4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_moon_client4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.1.15
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - moon_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  # ============================================
+  # Method 2: FedALA (172.18.2.x)
+  # ============================================
+  fedala_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_fedala_server
+    hostname: fl_fedala_server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.2.10
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  fedala_client0:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_fedala_client0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.2.11
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - fedala_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  fedala_client1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_fedala_client1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.2.12
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - fedala_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  fedala_client2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_fedala_client2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.2.13
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - fedala_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  fedala_client3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_fedala_client3
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.2.14
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - fedala_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  fedala_client4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_fedala_client4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.2.15
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - fedala_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  # ============================================
+  # Method 3: StatAvg (172.18.3.x)
+  # ============================================
+  statavg_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_statavg_server
+    hostname: fl_statavg_server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.3.10
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  statavg_client0:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_statavg_client0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.3.11
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - statavg_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  statavg_client1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_statavg_client1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.3.12
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - statavg_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  statavg_client2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_statavg_client2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.3.13
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - statavg_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  statavg_client3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_statavg_client3
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.3.14
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - statavg_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  statavg_client4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_statavg_client4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.3.15
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - statavg_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  # ============================================
+  # Method 4: DASHA (172.18.4.x)
+  # ============================================
+  dasha_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_dasha_server
+    hostname: fl_dasha_server
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.4.10
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  dasha_client0:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_dasha_client0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.4.11
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - dasha_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  dasha_client1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_dasha_client1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.4.12
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - dasha_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  dasha_client2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_dasha_client2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.4.13
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - dasha_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  dasha_client3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_dasha_client3
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.4.14
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - dasha_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+  dasha_client4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fl_dasha_client4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      fl_network:
+        ipv4_address: 172.18.4.15
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
+    depends_on:
+      - dasha_server
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - TF_CPP_MIN_LOG_LEVEL=2
+
+networks:
+  fl_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
