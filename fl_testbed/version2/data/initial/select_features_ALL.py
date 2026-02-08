@@ -1,24 +1,4 @@
 
-# P5 + T3 + ((P1 or P2 or P4) + (T2 + Gausian noise)
-# P6 + T4 + (P1 or (P2 or P4) + (T2 + Gausian noise)
-# P3 + T1 + (P1 or P2 or (P4) + (T2 + Gausian noise)
-
-# Stack all!
-
-# Find the best combination of P1,P2 and P4
-
-
-# The dataset. Will contain 2 vuib sensors +1 temp sensor + t2 with gaussian noise!
-# This will be repeated 3 so I will habe more data !
-
-# Train in centralized model! Using MLP
-
-# Get a good model!
-
-# Perform federated on the basis we have 3 motor engine setups with different sensors palcement with 5 classses each
-
-
-
 
 
 import pandas as pd
