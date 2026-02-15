@@ -1,8 +1,10 @@
 # Scalable Federated Learning
 
-This repository contains a complete federated learning testbed for IoT network anomaly detection, implementing multiple state-of-the-art FL algorithms with support for both LSTM and MLP models.
+![Federated Learning Architecture](1-s2.0-S0045790626000959-ga1_lrg.jpg)
 
-## 🎯 Overview
+This repository contains a complete federated learning testbed for IoT network anomaly detection, implementing multiple state-of-the-art FL algorithms with support for both LSTM and MLP models under varying NIID conditions based on the Dirichlet distribution.
+
+## Overview
 
 This project implements and compares **eight federated learning methods** - four traditional baseline methods and four advanced state-of-the-art algorithms:
 
@@ -52,12 +54,8 @@ FL_Detection_PublicStaging/
 └── requirements.txt                     # Python dependencies
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
-### Prerequisites
-- Docker and Docker Compose
-- NVIDIA GPU with CUDA support (recommended)
-- ~20GB free disk space
 
 ### 1. Start the Environment
 
@@ -99,36 +97,8 @@ Results are automatically copied to the host directory as:
 - `LSTM_<METHOD>_alpha_<VALUE>_<PARAM>_<VALUE>.txt` (LSTM results)
 - `MLP_<METHOD>_alpha_<VALUE>_<PARAM>_<VALUE>.txt` (MLP results)
 
-## 🔧 Configuration
 
-
-### Default Parameters
-
-**LSTM (run_4methods_simple.sh):**
-- Rounds: 1000
-- Alpha values: 0.001, 0.01, 0.1, 1.0 (data heterogeneity)
-- Fixed tau: 0.1 (for MOON/FedALA)
-- Fixed slr: 0.01 (for StatAvg/DASHA)
-- Epochs per round: 1
-- Clients: 5
-
-**MLP (run_4methods_simple_MLP.sh):**
-- Rounds: 100
-- Alpha values: 0.001, 0.01, 0.1, 1.0
-- Fixed tau: 0.1
-- Fixed slr: 0.01
-- Epochs per round: 1
-- Clients: 5
-
-### Network Architecture
-
-Each method runs in isolated Docker networks:
-- MOON: 172.18.1.0/24 (ports 8080+)
-- FedALA: 172.18.2.0/24 (ports 9000+)
-- StatAvg: 172.18.3.0/24 (ports 10000+)
-- DASHA: 172.18.4.0/24 (ports 11000+)
-
-## 📊 Data Processing
+## Data Processing
 
 ### Non-IID Data Partitioning
 
@@ -154,7 +124,7 @@ python3 fl_testbed/version2/client/independent.py \
     -dfn 'M3_5_0_ddf_LSTM.pkl'
 ```
 
-## 🎓 Methods Description
+## Methods Description
 
 ### Traditional Baseline Methods
 
@@ -287,14 +257,9 @@ sudo docker logs fl_moon_client0
 sudo docker exec fl_moon_server python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
 ```
 
-### Manual Process Cleanup
-```bash
-# Kill lingering processes in containers
-sudo docker exec fl_moon_server pkill -9 -f "federated_server"
-sudo docker exec fl_moon_client0 pkill -9 -f "federated_client"
-```
 
-## 📈 Results Analysis
+
+## Results Analysis
 
 Results files contain per-round metrics:
 - Training loss
@@ -305,7 +270,8 @@ Results files contain per-round metrics:
 
 Example result file: `LSTM_MOON_alpha_0.01_tau_0.1.txt`
 
-## 🛠️ Advanced Usage
+
+## Advanced Usage
 
 ### Running Individual Methods
 
@@ -380,14 +346,14 @@ sudo docker exec -d fl_moon_server bash -c "cd /workspace && \
     -dfn 'M3_5_0_ddf_MLP.pkl'"
 ```
 
-### Custom Parameter Sweeps
+### Custom Parameters
 
 Edit the orchestration scripts to modify:
 - `alphas="0.001 0.01 0.1 1.0"` (line ~333)
 - `FIXED_TAU=0.1` (line ~337)
 - `FIXED_SLR=0.01` (line ~338)
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 **GPU Out of Memory:**
 - Run fewer methods in parallel (1-2 instead of 3-4)
@@ -399,14 +365,75 @@ Edit the orchestration scripts to modify:
 - Modify port ranges in orchestration scripts
 
 **Data Not Found:**
-- Ensure data preprocessing completed successfully
+- Ensure data preprocessing completed successfully/executed first
 - Check `fl_testbed/version2/data/transformed/` for pickle files
 - Re-run data split scripts if needed
 
 **Containers Not Starting:**
 - Check Docker logs: `sudo docker compose -f docker-compose-4methods.yml logs`
 - Verify GPU availability: `nvidia-smi`
-- Check disk space: `df -h`
+
+## 📊 Results
+
+### Performance Summary
+
+**MLP Model (Offset Detection)** - Best configurations:
+
+| Method | Alpha | S-LR | Param | Accuracy | F1 | MCS | Loss | Runtime (s) |
+|--------|-------|------|-------|----------|----|----|------|-------------|
+| FedOpt | 1M | 1.0 | 1e-9 | **~1.000** | **~1.000** | **0.995** | **0.162** | 1,289 |
+| FedOpt | 1M | 1.0 | 1e-8 | **~1.000** | **~1.000** | **0.994** | 0.154 | 2,237 |
+| QFedAvg | 0.075 | 1.0 | 0.1 | 0.910 | 0.900 | 0.881 | 0.307 | 5,275 |
+| QFedAvg | 0.02 | 1.0 | 0.2 | 0.940 | 0.930 | 0.915 | 0.567 | 3,060 |
+| FedAvg | 0.1 | - | - | 0.890 | 0.870 | 0.859 | 1.607 | 2,458 |
+
+**LSTM Model (RUL Prediction)** - Best configurations:
+
+| Method | Alpha | S-LR | Param | R² | MSE | MAE | Loss | Runtime (s) |
+|--------|-------|------|-------|----|----|-----|------|-------------|
+| FedAvgM | 0.001 | 0.001 | 0.0 | **0.979** | **0.197** | **0.403** | 0.098 | 3,765 |
+| FedAvgM | 0.005 | 0.001 | 0.0 | 0.978 | 0.198 | 0.398 | 0.099 | 3,915 |
+| QFedAvg | 0.001 | 0.01 | 0.2 | 0.979 | 0.197 | 0.405 | 0.098 | 4,521 |
+| FedAvgM | 0.01 | 0.001 | 0.0 | 0.979 | 0.197 | 0.409 | 0.098 | 3,821 |
+| QFedAvg | 0.005 | 0.01 | 0.2 | 0.976 | 0.198 | 0.408 | 0.099 | 4,765 |
+
+**Key Findings:**
+- **MLP**: FedOpt with high alpha (1M) and learning rate (1.0) achieves near perfect accuracy (~1.000)
+- **LSTM**: FedAvgM with low alpha (0.001) and minimal momentum achieves best R² (0.979)
+- **Non-IID Impact**: Higher alpha values generally improve performance across all methods
+- **Runtime**: Traditional methods (FedAvg, FedAvgM, FedOpt) ~2-4x faster than fairness-based QFedAvg
+
+📄 **[View Complete Results Table](results.md)** - All experimental configurations with detailed metrics
+
+### Visualization Dashboards
+
+#### MLP Model (Offset Detection)
+
+<table>
+<tr>
+<td><img src="fl_testbed/version2/FL_Dashboard_FedAvg_offset.png" alt="FedAvg MLP" width="400"/><br/><b>FedAvg</b></td>
+<td><img src="fl_testbed/version2/FL_Dashboard_FedOpt_offset.png" alt="FedOpt MLP" width="400"/><br/><b>FedOpt</b></td>
+</tr>
+<tr>
+<td><img src="fl_testbed/version2/FL_Dashboard_FedAvgM_offset.png" alt="FedAvgM MLP" width="400"/><br/><b>FedAvgM</b></td>
+<td><img src="fl_testbed/version2/FL_Dashboard_QFedAvg_offset.png" alt="QFedAvg MLP" width="400"/><br/><b>QFedAvg</b></td>
+</tr>
+</table>
+
+#### LSTM Model (RUL Prediction)
+
+<table>
+<tr>
+<td><img src="fl_testbed/version2/FL_Dashboard_FedAvg_rul.png" alt="FedAvg LSTM" width="400"/><br/><b>FedAvg</b></td>
+<td><img src="fl_testbed/version2/FL_Dashboard_FedOpt_rul.png" alt="FedOpt LSTM" width="400"/><br/><b>FedOpt</b></td>
+</tr>
+<tr>
+<td><img src="fl_testbed/version2/FL_Dashboard_FedAvgM_rul.png" alt="FedAvgM LSTM" width="400"/><br/><b>FedAvgM</b></td>
+<td><img src="fl_testbed/version2/FL_Dashboard_QFedAvg_rul.png" alt="QFedAvg LSTM" width="400"/><br/><b>QFedAvg</b></td>
+</tr>
+</table>
+
+<!-- Complete results traditional methods with all parameter combinations are available in [resutls.txt](resutls.txt). -->
 
 <!-- ## 📝 Citation
 
@@ -426,3 +453,10 @@ If you use this code in your research, please cite:
 ## 📧 Contact
 
 jtupayachi.github.io
+
+
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=jtupayachi/FL_Detection_PublicStaging&type=timeline&legend=top-left)](https://www.star-history.com/#jtupayachi/FL_Detection_PublicStaging&type=timeline&legend=top-left)
