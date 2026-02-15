@@ -1,4 +1,4 @@
-# Scalable Federated Learning
+# Scalable decentralized prognostics for industrial systems under data heterogeneity
 
 ![Federated Learning Architecture](1-s2.0-S0045790626000959-ga1_lrg.jpg)
 
